@@ -48,15 +48,15 @@ async def chat_completion(request: ChatRequest):
         logging.error(f"Chat completion error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/cultural-tips/")
+@app.get("/cultural-tips/")
 async def cultural_tips(location: str):
     """Generate cultural tips based on location."""
     try:
-        prompt = f"What are some cultural tips to avoid faux pas in {location}?"
+        prompt = f"What are some cultural tips to consider in {location}?"
         chat_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}], model="llama3-8b-8192"
         )
-        return {"hidden_gems": chat_completion.choices[0].message.content}
+        return {"cultural_tips": chat_completion.choices[0].message.content}
     except Exception as e:
         logging.error(f"Cultural tips error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
