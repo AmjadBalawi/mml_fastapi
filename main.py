@@ -152,8 +152,8 @@ async def get_weather(city: str):
         description=data["currentConditions"]["conditions"],
         current_temperature=int(current_temperature_c),
         humidity=data["currentConditions"]["humidity"],
-        feels_like=feels_like_c,
+        feels_like=int(feels_like_c),
         wind_speed=data["currentConditions"]["windspeed"],
         precipitation=data["currentConditions"]["precip"],
-        forecast=forecast_c
+        forecast=int(forecast_c)
     )
