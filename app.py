@@ -73,7 +73,7 @@ async def translate_text(request: TranslationRequest):
         logging.error(f"Translation error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/hidden-gems")
+@app.get("/hidden-gems/")
 async def hidden_gems(location: str):
     """Fetch hidden gems based on the location using Groq."""
     try:
@@ -90,7 +90,7 @@ async def hidden_gems(location: str):
         logging.error(f"Hidden gems error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/destination-activities")
+@app.get("/destination-activities/")
 async def destination_activities(destination: str):
     """Fetch activities for a specific destination using Groq."""
     try:
