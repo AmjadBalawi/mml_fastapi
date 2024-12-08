@@ -1,13 +1,14 @@
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from groq import Groq
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 import requests
+import datetime
 from typing import Optional
 # Initialize FastAPI app
 app = FastAPI()
-
+page_views = []
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
@@ -17,7 +18,7 @@ origins = ["*"]
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Origins allowed to make requests
+    allow_origins=["*"],  # Origins allowed to make requests
     allow_credentials=True,
     allow_methods=["*"],     # Allow all HTTP methods
     allow_headers=["*"],     # Allow all headers
@@ -157,3 +158,20 @@ async def get_weather(city: str):
         precipitation=data["currentConditions"]["precip"],
         forecast=int(forecast_c)
     )
+@app.middleware("http")
+async def track_requests(request: Request, call_next):
+    # Log request details (this can be customized based on what data you want to capture)
+    page_view = {
+        "method": request.method,
+        "url": str(request.url),
+        "timestamp": datetime.datetime.utcnow()
+    }
+    page_views.append(page_view)
+
+    # Process the request and return the response
+    response = await call_next(request)
+    return response
+
+@app.get("/page-views/", include_in_schema=False)
+async def get_page_views():
+    return page_views
