@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 # Initialize Groq client
-client = Groq(api_key="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")
+client = Groq(api_key="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")
 
 
 # Models
